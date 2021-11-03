@@ -124,7 +124,7 @@ public class backgroundservice extends Service {
         //   boolean message = intent.getExtras().getBoolean(backgroundservice.MESSEAGE_KEY);
       //  int name = intent.getExtras().getInt("name");
       //      if(name == 1) {
-            Intent mMainIntent = new Intent(this,MainActivity.class);
+            Intent mMainIntent = new Intent(this,Notice.class);
             PendingIntent mPendingIntent = PendingIntent.getActivity(
                     this,1,mMainIntent,PendingIntent.FLAG_UPDATE_CURRENT
             );
