@@ -23,12 +23,12 @@ public class Notice extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice);
-        //
+
         mp = MediaPlayer.create(this, R.raw.sss);
         mp.setLooping(false); // 반복재샐
         mpclose = MediaPlayer.create(this, R.raw.close);
         mpclose.setLooping(false);
-        //
+
         this.registerReceiver(wifiEventReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
