@@ -22,21 +22,13 @@ public class backgroundservice extends Service {
 
     //public static final String MESSEAGE_KEY ="";
 
-
-
-  //  int stop = 0;
-
-//
     private final Handler mHandler = new Handler();
     String rcvIp, rcvPort, rcvPacket;
-
-
+    int defaultmp;
     private final Runnable rnb = new Runnable() {
         @Override
         public void run() {
-
-        //    if(stop == 1) {
-
+            if(defaultmp == 1) {
                 NotificationCompat.Builder mBuilder2 =
                         new NotificationCompat.Builder(backgroundservice.this, "push_message")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -45,49 +37,36 @@ public class backgroundservice extends Service {
                                 .setContentText("가로등에서 보행자가 감지되었습니다")
                                 .setTimeoutAfter(3000)
                                 .setColor(ContextCompat.getColor(backgroundservice.this, R.color.teal_700));
-                //   //                 .setAutoCancel(true)
                 NotificationManager mNotifyMgr2 =
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 mNotifyMgr2.notify(002, mBuilder2.build());
                 mp.start();
-       //         stop = 0;
-      //      }
+            }
+            else
+            {
+                defaultmp = 1;
+            }
         }
     };
     //
-
-
-
-
     public backgroundservice() {
     }
-
     MediaPlayer mp;
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-
         return null;
     }
-
     @Override
     public void onCreate() {
         //서비스에서 가장 먼저 호출(최초한번)
         mp = MediaPlayer.create(this, R.raw.ssyour);
         mp.setLooping(false); // 반복재생
         super.onCreate();
-
 //
         ReceiveData rcvServer = new ReceiveData(8266);
         rcvServer.start();
-
-
-//
     }
-
-
-    //
     class ReceiveData extends Thread {
         //UDP로 패킷을 받았을때 받은 패킷을 UI로 올리기 위해 handler 받아옴
         Handler handler = mHandler;
@@ -140,22 +119,11 @@ public class backgroundservice extends Service {
         }
 
     }
-//
-
-
-
-
-
     @Override
     public int onStartCommand(Intent intent,int flags, int startId) {
-
         //   boolean message = intent.getExtras().getBoolean(backgroundservice.MESSEAGE_KEY);
-
       //  int name = intent.getExtras().getInt("name");
-
       //      if(name == 1) {
-
-
             Intent mMainIntent = new Intent(this,MainActivity.class);
             PendingIntent mPendingIntent = PendingIntent.getActivity(
                     this,1,mMainIntent,PendingIntent.FLAG_UPDATE_CURRENT
@@ -171,12 +139,7 @@ public class backgroundservice extends Service {
             NotificationManager mNotifyMgr =
                     (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             mNotifyMgr.notify(001, mBuilder.build());
-
-
-
-
-
-
+            defaultmp = 1;
 /*            if(rcvPacket !=null && !rcvPacket.equals("")) {
                 mp.start();
                 NotificationCompat.Builder mBuilder2 =
@@ -194,9 +157,6 @@ public class backgroundservice extends Service {
 
 
             }*/
-
-
-
        //    }
        //    else {
        //        mp.stop();

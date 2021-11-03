@@ -21,6 +21,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        ////////////////////////////////////////////////////////////////////
+        // app test 하기 위해 쓰는 코드
+        debug {
+            applicationIdSuffix".dev"
+        }
+        ///////////////////////////////////////////////////////////////////
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

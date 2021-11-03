@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        ImageButton navi = (ImageButton) findViewById(R.id.navi);
+        //ImageButton navi = (ImageButton) findViewById(R.id.navi);
 
 
         ImageButton qna = (ImageButton) findViewById(R.id.qna);
@@ -100,9 +100,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Notice.class);
-                Intent intent2 = new Intent(getApplicationContext(), backgroundservice.class);
+                Intent backgroundserviceintent = new Intent(getApplicationContext(), backgroundservice.class);
                 startActivity(intent);
-                startService(intent2);
+                startService(backgroundserviceintent);
+                backgroundserviceintent.putExtra("번호", 1);
             }
         });
 
