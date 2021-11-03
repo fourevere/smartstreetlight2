@@ -24,6 +24,7 @@ public class backgroundservice extends Service {
 
     private final Handler mHandler = new Handler();
     String rcvIp, rcvPort, rcvPacket;
+    ReceiveData rcvServer = new ReceiveData(8266);
     int defaultmp;
     private final Runnable rnb = new Runnable() {
         @Override
@@ -63,8 +64,7 @@ public class backgroundservice extends Service {
         mp = MediaPlayer.create(this, R.raw.ssyour);
         mp.setLooping(false); // 반복재생
         super.onCreate();
-//
-        ReceiveData rcvServer = new ReceiveData(8266);
+
         rcvServer.start();
     }
     class ReceiveData extends Thread {
@@ -173,7 +173,9 @@ public class backgroundservice extends Service {
         NotificationManager mNotifyMgr =
                 (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancelAll();
-   //     stop = 0;
+        //moveTaskToBack(true);						// 태스크를 백그라운드로 이동
+       // finishAndRemoveTask();						// 액티비티 종료 + 태스크 리스트에서 지우기
+        android.os.Process.killProcess(android.os.Process.myPid());	// 앱 프로세스 종료
         super.onDestroy();
     }
 }

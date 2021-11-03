@@ -16,8 +16,8 @@
         <service
             android:name=".backgroundservice"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true"
+            android:stopWithTask="false" ></service>
         <activity android:name=".Info"></activity>
         <activity android:name=".Notice" />
         <activity android:name=".Qna" />
