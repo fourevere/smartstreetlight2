@@ -25,11 +25,23 @@ public class backgroundservice extends Service {
     private final Handler mHandler = new Handler();
     String rcvIp, rcvPort, rcvPacket;
     ReceiveData rcvServer = new ReceiveData(8266);
-    int defaultmp;
+    int defaultmp = 0;
+    int Defaultrun = 0;
+    int count = 0;
+    private Handler mHandler2;
     private final Runnable rnb = new Runnable() {
         @Override
         public void run() {
-            if(defaultmp == 1) {
+            if(Defaultrun == 1)
+            {
+                for(int i = 0; i < 1000; i++)
+                {
+                    count++;
+                }
+                Defaultrun = 0;
+                count = 0;
+            }
+            if(defaultmp == 1){
                 NotificationCompat.Builder mBuilder2 =
                         new NotificationCompat.Builder(backgroundservice.this, "push_message")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -42,10 +54,6 @@ public class backgroundservice extends Service {
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 mNotifyMgr2.notify(002, mBuilder2.build());
                 mp.start();
-            }
-            else
-            {
-                defaultmp = 1;
             }
         }
     };
@@ -63,10 +71,21 @@ public class backgroundservice extends Service {
         //서비스에서 가장 먼저 호출(최초한번)
         mp = MediaPlayer.create(this, R.raw.ssyour);
         mp.setLooping(false); // 반복재생
+
+        mHandler2 = new Handler();
+        mStatusChecker.run();
+
         super.onCreate();
 
         rcvServer.start();
     }
+
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            mHandler2.postDelayed(mStatusChecker,1500);
+        }
+    };
     class ReceiveData extends Thread {
         //UDP로 패킷을 받았을때 받은 패킷을 UI로 올리기 위해 handler 받아옴
         Handler handler = mHandler;
@@ -139,7 +158,7 @@ public class backgroundservice extends Service {
             NotificationManager mNotifyMgr =
                     (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             mNotifyMgr.notify(001, mBuilder.build());
-            defaultmp = 1;
+            Defaultrun = 1;
 /*            if(rcvPacket !=null && !rcvPacket.equals("")) {
                 mp.start();
                 NotificationCompat.Builder mBuilder2 =
@@ -165,6 +184,7 @@ public class backgroundservice extends Service {
        //     }
             return START_STICKY;
     }
+
 
     @Override
     public void onDestroy() {
