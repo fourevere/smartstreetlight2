@@ -25,23 +25,20 @@ public class backgroundservice extends Service {
     private final Handler mHandler = new Handler();
     String rcvIp, rcvPort, rcvPacket;
     ReceiveData rcvServer = new ReceiveData(8266);
-    int defaultmp = 0;
+
     int Defaultrun = 0;
-    int count = 0;
+
     private Handler mHandler2;
     private final Runnable rnb = new Runnable() {
         @Override
         public void run() {
+
             if(Defaultrun == 1)
             {
-                for(int i = 0; i < 1000; i++)
-                {
-                    count++;
-                }
+                mStatusChecker.run();
                 Defaultrun = 0;
-                count = 0;
             }
-            if(defaultmp == 1){
+            else {
                 NotificationCompat.Builder mBuilder2 =
                         new NotificationCompat.Builder(backgroundservice.this, "push_message")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -71,10 +68,8 @@ public class backgroundservice extends Service {
         //서비스에서 가장 먼저 호출(최초한번)
         mp = MediaPlayer.create(this, R.raw.ssyour);
         mp.setLooping(false); // 반복재생
-
+        Defaultrun = 1;
         mHandler2 = new Handler();
-        mStatusChecker.run();
-
         super.onCreate();
 
         rcvServer.start();
@@ -83,7 +78,7 @@ public class backgroundservice extends Service {
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-            mHandler2.postDelayed(mStatusChecker,1500);
+            mHandler2.postDelayed(rnb, 2000);
         }
     };
     class ReceiveData extends Thread {
@@ -158,7 +153,7 @@ public class backgroundservice extends Service {
             NotificationManager mNotifyMgr =
                     (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             mNotifyMgr.notify(001, mBuilder.build());
-            Defaultrun = 1;
+
 /*            if(rcvPacket !=null && !rcvPacket.equals("")) {
                 mp.start();
                 NotificationCompat.Builder mBuilder2 =
