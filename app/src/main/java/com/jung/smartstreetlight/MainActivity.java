@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -16,7 +18,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     //위치권한설정
     int nCurrentPermission = 0;
@@ -88,10 +90,38 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Qna.class);
-                startActivity(intent);
+         //       Intent intent = new Intent(getApplicationContext(), Qna.class);
+         //       startActivity(intent);
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage("개발중입니다!")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
             }
         });
+
+        ImageButton Navi = (ImageButton) findViewById(R.id.navi);
+
+        Navi.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //       Intent intent = new Intent(getApplicationContext(), Qna.class);
+                //       startActivity(intent);
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage("개발중입니다!")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
+            }
+        });
+
 
         ImageButton notice = (ImageButton) findViewById(R.id.notice);
 

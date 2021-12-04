@@ -24,21 +24,19 @@ public class backgroundservice extends Service {
 
     private final Handler mHandler = new Handler();
     String rcvIp, rcvPort, rcvPacket;
+    int Defaultrun = 1;
     ReceiveData rcvServer = new ReceiveData(8266);
-
-    int Defaultrun = 0;
-
-    private Handler mHandler2;
+    //private Handler mHandler2;
     private final Runnable rnb = new Runnable() {
         @Override
         public void run() {
 
-            if(Defaultrun == 1)
+    /*        if(Defaultrun == 1)
             {
                 mStatusChecker.run();
                 Defaultrun = 0;
             }
-            else {
+            else {*/
                 NotificationCompat.Builder mBuilder2 =
                         new NotificationCompat.Builder(backgroundservice.this, "push_message")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -51,7 +49,7 @@ public class backgroundservice extends Service {
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 mNotifyMgr2.notify(002, mBuilder2.build());
                 mp.start();
-            }
+          //  }
         }
     };
     //
@@ -68,19 +66,12 @@ public class backgroundservice extends Service {
         //서비스에서 가장 먼저 호출(최초한번)
         mp = MediaPlayer.create(this, R.raw.ssyour);
         mp.setLooping(false); // 반복재생
-        Defaultrun = 1;
-        mHandler2 = new Handler();
+        //mHandler2 = new Handler();
         super.onCreate();
 
         rcvServer.start();
     }
 
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            mHandler2.postDelayed(rnb, 2000);
-        }
-    };
     class ReceiveData extends Thread {
         //UDP로 패킷을 받았을때 받은 패킷을 UI로 올리기 위해 handler 받아옴
         Handler handler = mHandler;
@@ -99,36 +90,39 @@ public class backgroundservice extends Service {
         public void run() {
             try {
                 while (true) {
-              //      stop = 1;
-                    //받을 패킷 생성
-                    byte[] buf = new byte[1024];
-                    //패킷으로 변경 (바이트 버퍼, 버퍼길이)
-                    DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                    //데이터 수신 대기
-                    rSocket.receive(packet);
-                    //패킷을 보낸 상대방의 ip를 저장함
-                    InetAddress ina = packet.getAddress();
-                    rcvIp = ina.toString();
-                    //패킷을 보낸 상대방의 port를 저장함
-                    int inp = packet.getPort();
-                    rcvPort = String.valueOf(inp);
-                    //수신받은 데이터를 문자열로 변환
-                    rcvPacket = new String(buf);
-                    //에코하기 위해 송신용 패킷을 만듦 (받은 패킷, 패킷 길이, 상대방 IP, 상대방 PORT)
-                    packet = new DatagramPacket(buf, buf.length, ina, inp);
-                    //이 기기로 UDP송신을 한 상대방에게 받은패킷을 돌려줌
-                    rSocket.send(packet);
-                    //데이터를 받았다면 UI로 표현해주기 위해 runnable 사용
-                    handler.post(rnb);
-                    //쓰레드를 인터럽트로 종료시키기 위해 sleep을 사용함
-                    sleep(20);
+                        //받을 패킷 생성
+                        byte[] buf = new byte[1024];
+                        //패킷으로 변경 (바이트 버퍼, 버퍼길이)
+                        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                        //데이터 수신 대기
+                        rSocket.receive(packet);
+                        //패킷을 보낸 상대방의 ip를 저장함
+                        InetAddress ina = packet.getAddress();
+                        rcvIp = ina.toString();
+                        //패킷을 보낸 상대방의 port를 저장함
+                        int inp = packet.getPort();
+                        rcvPort = String.valueOf(inp);
+                        //수신받은 데이터를 문자열로 변환
+                        //에코하기 위해 송신용 패킷을 만듦 (받은 패킷, 패킷 길이, 상대방 IP, 상대방 PORT)
+                        rcvPacket = new String(buf);
+                        packet = new DatagramPacket(buf, buf.length, ina, inp);
+                        //이 기기로 UDP송신을 한 상대방에게 받은패킷을 돌려줌
+                        rSocket.send(packet);
+                        //데이터를 받았다면 UI로 표현해주기 위해 runnable 사용
+                        handler.post(rnb);
+                        //쓰레드를 인터럽트로 종료시키기 위해 sleep을 사용함
+                        sleep(20);
                 }
             } catch (InterruptedException e) {
                 rcvPacket = e.toString();
-                handler.post(rnb);
+
+               //     handler.post(rnb);
+
             } catch (Exception e) {
                 rcvPacket = e.toString();
-                handler.post(rnb);
+
+             //       handler.post(rnb);
+
             }
         }
 
